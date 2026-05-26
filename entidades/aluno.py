@@ -1,10 +1,17 @@
 from entidades.pessoa import Pessoa
+from database.connection import Base
+from sqlalchemy import Column, Integer, ForeignKey
 
 class Aluno(Pessoa): #subclasse Aluno
 
-    def __init__(self, matricula: int, nome: str, data: str, cpf: str, sexo: str):
-        super().__init__(nome, data, cpf, sexo)
-        self.matricula = matricula
+    __tablename__ = "alunos"
+
+    id = Column(Integer, ForeignKey("pessoas.id"), primary_key=True)
+    matricula = Column(Integer, unique=True, nullable=False)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "aluno"
+    }
 
     def __str__(self): 
         return f'Aluno | Matrícula: {self.matricula}, {super().__str__()}'

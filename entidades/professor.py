@@ -1,10 +1,17 @@
 from entidades.pessoa import Pessoa
+from database.connection import Base
+from sqlalchemy import Column, Integer, ForeignKey, String
 
 class Professor(Pessoa): #subclasse Professor
 
-    def __init__(self, cref: str, nome: str, data: str, cpf: str, sexo: str):
-        super().__init__(nome, data, cpf, sexo)
-        self.cref = cref 
+    __tablename__ = "professores"
+
+    id = Column(Integer, ForeignKey('pessoas.id'), primary_key=True)
+    cref = Column(String, unique=True, nullable=False)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "professor"
+    }
 
     def __str__(self):
         return f'Professor | CREF: {self.cref}, {super().__str__()}'
